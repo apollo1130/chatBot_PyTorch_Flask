@@ -3,7 +3,7 @@ import json
 from flask import Flask, jsonify,request
 from flask_cors import CORS
 import time
-import html
+
 import torch
 
 from model import NeuralNet
@@ -67,12 +67,40 @@ def response():
 if __name__=="__main__":
     app.run(host="0.0.0.0",) """
     
-
     
+app = Flask(__name__);
 CORS(app)
-@app.route("/", methods=["GET"])
+@app.route("/bot", methods=["POST"])
+
+#response
+def response():
+    query = dict(request.form)['query']
+    res = query 
+    res =  tokenize(res)
+    
+    X = bag_of_words(res, all_words)
+    X = X.reshape(1, X.shape[0])
+    X = torch.from_numpy(X).to(device)
+    
+    output = model(X)
+    _, predicted = torch.max(output, dim=1)
+    tag = tags[predicted.item()]
+    
+    probs = torch.softmax(output, dim=1)
+    prob = probs[0][predicted.item()]
+    if prob.item() > 0.75:
+        for intent in intents['intents']:
+            if tag == intent["tag"]:
+                
+                return jsonify({"response" : random.choice(intent['responses'])})
+    else:
+        return jsonify({"response" : " I do not understand..."})
+       
+@app.route('/', methods=["GET"])
 def home():
-    return '<h1>Chatting with AI</h1>'
+    return '<h1>CharLotia</h1>'
+    
+
 
 
 
