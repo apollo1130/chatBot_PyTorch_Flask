@@ -96,12 +96,6 @@ def response():
     else:
         return jsonify({"response" : " I do not understand..."})
        
-CORS(app)
-@app.route("/", methods=["GET"])
-
-def getHtml():
-    return html('Incorrect password. <a href="/">Go back?</a>')
-
     
 
 
