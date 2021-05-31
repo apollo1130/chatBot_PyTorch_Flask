@@ -3,7 +3,7 @@ import json
 from flask import Flask, jsonify,request
 from flask_cors import CORS
 import time
-
+import html
 import torch
 
 from model import NeuralNet
@@ -96,9 +96,12 @@ def response():
     else:
         return jsonify({"response" : " I do not understand..."})
        
-     
-if __name__=="__main__":
-    app.run() 
+CORS(app)
+@app.route("/", methods=["GET"])
+
+def getHtml():
+    return html('Incorrect password. <a href="/">Go back?</a>')
+
     
 
 
