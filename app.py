@@ -97,7 +97,10 @@ def response():
         return jsonify({"response" : " I do not understand..."})
        
     
-
+CORS(app)
+@app.route("/", methods=["GET"])
+def home():
+    return '<h1>Chatting with AI</h1>'
 
 
 
